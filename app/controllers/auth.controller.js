@@ -3,9 +3,10 @@ const sql = require("../config/dbConnect");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 const bcrypt = require("bcryptjs");
+const { response } = require("../../server");
 
 //Register a new user
-exports.signup = (request, response) => {
+exports.register = (request, response) => {
   const email = request.body.mail;
   const password = bcrypt.hashSync(req.body.password, 8);
   const firstname = request.body.firstname;
@@ -68,7 +69,7 @@ exports.signup = (request, response) => {
 
 // Sign in an existing User
 
-exports.signin = async (request, response) => {
+exports.login = async (request, response) => {
   const email = request.body.mail;
   const password = request.body.password;
 
@@ -104,7 +105,7 @@ exports.signin = async (request, response) => {
       );
       return response.status(200).json({
         status: true,
-        message: "User signed in",
+        message: "User logged in",
         token: token,
         email: userData[0].email
       });
@@ -116,3 +117,11 @@ exports.signin = async (request, response) => {
     }
   });
 };
+
+exports.logout = (request, response)=>{
+  return response.status(200).json({
+    status: true,
+    message: "User is Logged out",
+    token: null
+  });
+}

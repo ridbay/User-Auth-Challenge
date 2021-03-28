@@ -2,10 +2,11 @@
 const { check } = require("express-validator");
 const authController = require("../controllers/auth.controller");
 const validateReqBody = require("../middleware/validateReqBody");
+const validateJWT = require("../middleware/authJwt")
 
 module.exports = function (app) {
   app.post(
-    "/auth/signup",
+    "/auth/register",
     [
       check("email")
         .normalizeEmail()
@@ -27,10 +28,10 @@ module.exports = function (app) {
         .withMessage("Enter your last name"),
     ],
     validateReqBody,
-    authController.signup
+    authController.register
   );
   app.post(
-    "/auth/signin",
+    "/auth/login",
     [
       check("email")
         .notEmpty()
@@ -42,8 +43,8 @@ module.exports = function (app) {
         .withMessage("Password is required and miniumum lenght of 4"),
     ],
     validateReqBody,
-    authController.signin
+    authController.login
   );
 
-
+app.get("/auth/logout",validateJWT ,authController.logout)
 };
